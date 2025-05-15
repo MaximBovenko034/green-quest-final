@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Green Quest – Еко Місія</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #dff0d8;
+      overflow: hidden;
+      position: relative;
+    }
+    #gameCanvas {
+      background: url('background.jpg') no-repeat center center;
+      background-size: cover;
+      display: block;
+      margin: 0 auto;
+      border: 2px solid #4CAF50;
+    }
+    #startButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="800" height="500"></canvas>
+<button id="startButton">Почати прибирання</button>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const startBtn = document.getElementById("startButton");
+
+  let trash = [
+    {x: 100, y: 300, picked: false},
+    {x: 300, y: 350, picked: false},
+    {x: 500, y: 280, picked: false},
+  ];
+
+  let trashImg = new Image();
+  trashImg.src = "trash.png";
+
+  function drawScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    trash.forEach(item => {
+      if (!item.picked) ctx.drawImage(trashImg, item.x, item.y, 40, 40);
+    });
+  }
+
+  canvas.addEventListener("click", function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    trash.forEach(item => {
+      if (!item.picked && clickX >= item.x && clickX <= item.x + 40 && clickY >= item.y && clickY <= item.y + 40) {
+        item.picked = true;
+      }
+    });
+
+    drawScene();
+  });
+
+  startBtn.addEventListener("click", function() {
+    trash.forEach(item => item.picked = false);
+    drawScene();
+  });
+
+  trashImg.onload = () => drawScene();
+</script>
+
+</body>
+</html>
