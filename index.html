@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Green Quest – Еко Місія</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #dff0d8;
+      overflow: hidden;
+      position: relative;
+    }
+    #gameCanvas {
+      background: url('background.jpg') no-repeat center center;
+      background-size: cover;
+      display: block;
+      margin: 0 auto;
+      border: 2px solid #4CAF50;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    #startButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 10;
+      animation: fadeInUp 1s ease-out;
+      transition: transform 0.3s ease;
+    }
+    #startButton:hover {
+      transform: scale(1.1);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="800" height="500"></canvas>
+<button id="startButton">Почати прибирання</button>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const startBtn = document.getElementById("startButton");
+
+  let trash = [
+    {x: 100, y: 300, picked: false},
+    {x: 300, y: 350, picked: false},
+    {x: 500, y: 280, picked: false},
+  ];
+
+  let trashImg = new Image();
+  trashImg.src = "trash.png";
+
+  function drawScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    trash.forEach(item => {
+      if (!item.picked) {
+        ctx.drawImage(trashImg, item.x, item.y, 40, 40);
+      }
+    });
+  }
+
+  canvas.addEventListener("click", function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    trash.forEach(item => {
+      if (!item.picked && clickX >= item.x && clickX <= item.x + 40 && clickY >= item.y && clickY <= item.y + 40) {
+        item.picked = true;
+        gsap.to(item, {
+          duration: 0.3,
+          y: item.y - 50,
+          onUpdate: drawScene,
+          onComplete: drawScene
+        });
+      }
+    });
+
+    drawScene();
+  });
+
+  startBtn.addEventListener("click", function() {
+    trash.forEach(item => {
+      item.picked = false;
+      item.y = item.y + 50; // повертаємо назад при старті
+    });
+    drawScene();
+  });
+
+  trashImg.onload = () => drawScene();
+</script>
+
+</body>
+</html>
