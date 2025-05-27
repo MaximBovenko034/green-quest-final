@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -55,10 +54,20 @@
 <canvas id="gameCanvas" width="800" height="500"></canvas>
 <button id="startButton">Почати прибирання</button>
 
+<audio id="soundClick" src="click-trash.mp3"></audio>
+<audio id="soundStart" src="start.mp3"></audio>
+<audio id="soundWin" src="win.mp3"></audio>
+<audio id="bgMusic" src="bg-music.mp3" loop></audio>
+
 <script>
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
   const startBtn = document.getElementById("startButton");
+
+  const soundClick = document.getElementById("soundClick");
+  const soundStart = document.getElementById("soundStart");
+  const soundWin = document.getElementById("soundWin");
+  const bgMusic = document.getElementById("bgMusic");
 
   let trash = [
     {x: 100, y: 300, picked: false},
@@ -86,11 +95,20 @@
     trash.forEach(item => {
       if (!item.picked && clickX >= item.x && clickX <= item.x + 40 && clickY >= item.y && clickY <= item.y + 40) {
         item.picked = true;
+        soundClick.currentTime = 0;
+        soundClick.play();
+
         gsap.to(item, {
           duration: 0.3,
           y: item.y - 50,
           onUpdate: drawScene,
-          onComplete: drawScene
+          onComplete: () => {
+            drawScene();
+            if (trash.every(t => t.picked)) {
+              soundWin.currentTime = 0;
+              soundWin.play();
+            }
+          }
         });
       }
     });
@@ -101,9 +119,15 @@
   startBtn.addEventListener("click", function() {
     trash.forEach(item => {
       item.picked = false;
-      item.y = item.y + 50; // повертаємо назад при старті
+      item.y = item.y + 50;
     });
     drawScene();
+
+    soundStart.currentTime = 0;
+    soundStart.play();
+
+    bgMusic.currentTime = 0;
+    bgMusic.play();
   });
 
   trashImg.onload = () => drawScene();
