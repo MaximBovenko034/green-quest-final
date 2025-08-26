@@ -6,3 +6,15 @@ document.addEventListener("mousemove", (e) => {
   document.querySelector(".middle").style.transform = `translate(${x/2}px, ${y/2}px)`;
   document.querySelector(".front").style.transform = `translate(${x/4}px, ${y/4}px) scale(0.8)`;
 });
+function createLeaf() {
+  const leaf = document.createElement("div");
+  leaf.classList.add("leaf");
+  leaf.style.left = Math.random() * window.innerWidth + "px";
+  document.body.appendChild(leaf);
+
+  setTimeout(() => {
+    leaf.remove();
+  }, 8000);
+}
+
+setInterval(createLeaf, 1000);
