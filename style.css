@@ -1,107 +1,38 @@
-/* ====== Базові стилі (безпечні, з префіксом .gq-) ====== */
-:root {
-  --gq-text: #203426;
-  --gq-bg: #e8f7ee;
-}
 
-html, body {
-  height: 100%;
-}
-
-body {
+body, html {
   margin: 0;
-  background: var(--gq-bg);
-  color: var(--gq-text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  padding: 0;
   overflow-x: hidden;
+  height: 100vh;
 }
 
-/* Заголовок/підзаголовок (можна прибрати) */
-.gq-title {
-  position: fixed;
-  top: 16px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 800;
-  z-index: 10;
-  margin: 0;
-  pointer-events: none;
-}
-
-.gq-subtitle {
-  position: fixed;
-  top: 56px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 1rem;
-  z-index: 10;
-  margin: 0;
-  pointer-events: none;
-}
-
-/* ====== Parallax фон (позаду всього) ====== */
-.gq-parallax {
-  position: fixed;
-  inset: 0;
-  z-index: -1;         /* головне: ЩОБ НЕ ЗАВАЖАЛО ГРІ */
-  perspective: 1px;
+.parallax {
+  position: relative;
+  height: 100vh;
   overflow: hidden;
+  perspective: 1px;
+  transform-style: preserve-3d;
 }
 
-.gq-layer {
+.layer {
   position: absolute;
-  inset: 0;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
   background-size: cover;
-  background-position: center;
-  will-change: transform; /* підказка для GPU */
-}
-
-/* Шари */
-.gq-back {
-  background-image: url("images/background.jpg");
-  transform: translateZ(-1px) scale(2); /* найповільніший */
-}
-
-.gq-middle {
-  background-image: url("images/forest.png");
-  transform: translateZ(0);
-}
-
-.gq-front {
-  background-image: url("images/character.png");
-  transform: translateZ(1px) scale(0.85);
-}
-
-/* ====== Частинки (листочки) ====== */
-.gq-leaf {
-  position: fixed;
-  top: -60px;
-  width: 28px;
-  height: 28px;
-  background-image: url("images/leaf.png");
-  background-size: contain;
   background-repeat: no-repeat;
-  pointer-events: none;
-  animation-name: gq-fall;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-  will-change: transform;
+  background-position: center;
 }
 
-@keyframes gq-fall {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg);    opacity: 0.9; }
-  100% { transform: translate3d(0, 110vh, 0) rotate(360deg); opacity: 0.9; }
-}
+.layer-back { background-image: linear-gradient(#a8e6cf, #dcedc1); transform: translateZ(-1px) scale(2); }
+.layer-mid { background-image: url('https://via.placeholder.com/1200x800/88c999/ffffff?text=Середній+шар'); transform: translateZ(-0.5px) scale(1.5); }
+.layer-front { background-image: url('https://via.placeholder.com/1200x800/66bb6a/ffffff?text=Передній+шар'); }
 
-/* Повага до користувачів, яким важко з анімаціями */
-@media (prefers-reduced-motion: reduce) {
-  .gq-layer,
-  .gq-leaf {
-    animation: none !important;
-    transition: none !important;
-  }
-  body.gq-effects-on .gq-parallax { display: none; }
+.title {
+  position: relative;
+  color: white;
+  font-size: 3rem;
+  text-align: center;
+  top: 40%;
+  font-family: Arial, sans-serif;
 }

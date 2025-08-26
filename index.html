@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Green Quest — Практична 7</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Quest – Практична 7</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="gq-effects-on">
-  <!-- Фон з візуальною глибиною (Parallax). Не заважає грі: фіксований і позаду всього -->
-  <div class="gq-parallax" aria-hidden="true">
-    <div class="gq-layer gq-back"></div>
-    <div class="gq-layer gq-middle"></div>
-    <div class="gq-layer gq-front"></div>
+<body>
+  <div class="parallax">
+    <div class="layer layer-back"></div>
+    <div class="layer layer-mid"></div>
+    <div class="layer layer-front"></div>
+    <h1 class="title">Green Quest – Практична 7</h1>
   </div>
-
-  <!-- Текст над фоном (можна прибрати, якщо не треба) -->
-  <h1 class="gq-title">Green Quest 🌱</h1>
-  <p class="gq-subtitle">Практична 7: глибина сцени + частинки</p>
-
-  <!-- Твоя гра/контент. Можеш залишити порожнім: ми нічого тут не міняємо -->
-  <main id="game"></main>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
