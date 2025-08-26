@@ -8,31 +8,34 @@ body, html {
 
 .parallax {
   position: relative;
-  height: 100vh;
   overflow: hidden;
+  height: 100vh;
+  width: 100%;
   perspective: 1px;
-  transform-style: preserve-3d;
 }
 
 .layer {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
 }
 
-.layer-back { background-image: linear-gradient(#a8e6cf, #dcedc1); transform: translateZ(-1px) scale(2); }
-.layer-mid { background-image: url('https://via.placeholder.com/1200x800/88c999/ffffff?text=Середній+шар'); transform: translateZ(-0.5px) scale(1.5); }
-.layer-front { background-image: url('https://via.placeholder.com/1200x800/66bb6a/ffffff?text=Передній+шар'); }
-
-.title {
-  position: relative;
-  color: white;
-  font-size: 3rem;
-  text-align: center;
-  top: 40%;
-  font-family: Arial, sans-serif;
+.back {
+  background-image: url("images/background.jpg");
+  transform: translateZ(-1px) scale(2);
 }
+
+.middle {
+  background-image: url("images/forest.png");
+  transform: translateZ(0);
+}
+
+.front {
+  background-image: url("images/character.png");
+  transform: translateZ(1px) scale(0.8);
+}
+
