@@ -39,3 +39,18 @@ body, html {
   transform: translateZ(1px) scale(0.8);
 }
 
+.leaf {
+  position: absolute;
+  top: -50px;
+  width: 30px;
+  height: 30px;
+  background-image: url("images/leaf.png");
+  background-size: contain;
+  animation: fall 8s linear forwards;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0); }
+  100% { transform: translateY(100vh) rotate(360deg); }
+}
+
