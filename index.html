@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Green Quest — Практична 7</title>
+  <title>Green Quest — версия с Parallax и Particles</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Основная обёртка для parallax слоёв -->
   <div id="parallax-root">
-    <!-- Фоновые слои -->
+    <!-- фоновые слои (слой 1 = далеко, слой 2 = ближе) -->
     <div class="bg-layer layer-back" data-depth="0.1"></div>
     <div class="bg-layer layer-mid" data-depth="0.3"></div>
 
@@ -20,20 +21,20 @@
       </header>
 
       <section id="board">
-        <!-- Мусор для примера -->
+        <!-- Пример игрового контента: мусор (который кликается) -->
+        <!-- Наложены классы для JS-логики -->
         <img src="trash.png" alt="trash" class="trash clickable" style="left:20%; top:40%" />
         <img src="trash.png" alt="trash" class="trash clickable" style="left:60%; top:55%" />
       </section>
 
-      <!-- HUD -->
       <div id="hud">
-        <div id="scoreBox">Очки: <span id="score">0</span>/<span id="target">5</span></div>
         <div id="message" class="hidden"></div>
       </div>
     </main>
 
-    <!-- Canvas для частиц -->
+    <!-- canvas для частиц -->
     <canvas id="particles-canvas"></canvas>
+
   </div>
 
   <script src="script.js"></script>
