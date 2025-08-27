@@ -12,6 +12,13 @@ body {
   background: url('images/background.jpg') no-repeat center center/cover;
 }
 
+#gameArea {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('images/forest-background.jpg') no-repeat center center/cover;
+}
+
 .trash {
   position: absolute;
   width: 60px;
@@ -70,3 +77,4 @@ body {
 .hidden {
   display: none;
 }
+
