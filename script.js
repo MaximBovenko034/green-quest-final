@@ -1,11 +1,11 @@
 (function(){
+  // --- элементы ---
+  const parallaxRoot = document.getElementById('parallax-root');
   const layers = Array.from(document.querySelectorAll('.bg-layer'));
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
   const startBtn = document.getElementById('startBtn');
   const message = document.getElementById('message');
-  const scoreSpan = document.getElementById('score');
-  const targetSpan = document.getElementById('target');
 
   // --- звуки ---
   const sounds = {
@@ -18,10 +18,7 @@
 
   // --- очки ---
   let score = 0;
-  const targetScore = 5;
-  targetSpan.textContent = targetScore;
-
-  function updateScore(){ scoreSpan.textContent = score; }
+  const targetScore = 5; // победа при 5 убранных мусорах
 
   // --- canvas resize ---
   function resizeCanvas(){
@@ -86,7 +83,11 @@
       ctx.fill();
     }
   }
-  function loop(){ updateParticles(); drawParticles(); requestAnimationFrame(loop); }
+  function loop(){
+    updateParticles();
+    drawParticles();
+    requestAnimationFrame(loop);
+  }
   requestAnimationFrame(loop);
 
   // --- клик по мусору ---
@@ -94,21 +95,24 @@
     const items = document.querySelectorAll('.clickable');
     items.forEach(el=>{
       el.addEventListener('click', function(){
+        // звук клика
         sounds.click.currentTime = 0;
         sounds.click.play();
 
+        // частицы
         const rect = el.getBoundingClientRect();
         const cx = rect.left + rect.width/2;
         const cy = rect.top + rect.height/2;
         createParticles(cx,cy,30);
 
+        // исчезновение
         el.style.transition = 'transform .35s ease, opacity .35s ease';
         el.style.transform = 'scale(0.25) rotate(-10deg)';
         el.style.opacity = '0';
         setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); }, 450);
 
+        // очки
         score++;
-        updateScore();
         if(score>=targetScore) winGame();
       });
     });
@@ -117,9 +121,10 @@
 
   // --- старт игры ---
   startBtn.addEventListener('click', function(){
+    // сброс счёта
     score = 0;
-    updateScore();
 
+    // звук старта + фон
     sounds.start.play();
     sounds.bg.currentTime = 0;
     sounds.bg.play();
@@ -133,6 +138,7 @@
   function winGame(){
     sounds.bg.pause();
     sounds.win.play();
+
     message.textContent = '🎉 Победа! Ты очистил лес!';
     message.classList.remove('hidden');
     message.style.background = 'rgba(0,150,0,0.7)';
