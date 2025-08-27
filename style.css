@@ -9,13 +9,6 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url('images/background.jpg') no-repeat center center/cover;
-}
-
-#gameArea {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
   background: url('images/forest-background.jpg') no-repeat center center/cover;
 }
 
@@ -77,4 +70,5 @@ body {
 .hidden {
   display: none;
 }
+
 
