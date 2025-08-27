@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Green Quest</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Убираем 404 favicon -->
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="gameArea">
-    <div id="bg-layer"></div>
-    <div id="forest-layer"></div>
+    <!-- Слои фона для параллакса -->
+    <div id="bg-layer" aria-hidden="true"></div>
+    <div id="forest-layer" aria-hidden="true"></div>
 
+    <!-- HUD -->
     <div id="hud">
       <div id="scoreBox">Очки: <span id="score">0</span>/<span id="target">0</span></div>
-      <button id="startBtn">Start</button>
+      <button id="startBtn" class="btn">Start</button>
       <div id="message" class="hidden"></div>
     </div>
 
-    <img src="images/trash.png" class="trash" style="top:70%; left:20%;">
-    <img src="images/trash.png" class="trash" style="top:65%; left:40%;">
-    <img src="images/trash.png" class="trash" style="top:75%; left:60%;">
-    <img src="images/trash.png" class="trash" style="top:68%; left:80%;">
-    <img src="images/trash.png" class="trash" style="top:72%; left:50%;">
+    <!-- Контейнер, куда JS будет подкидывать мусор -->
+    <div id="trash-container"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
