@@ -1,83 +1,67 @@
-// --- Звуки ---
+// ---------------------------
+//   НАСТРОЙКИ И РЕСУРСЫ
+// ---------------------------
+const CONFIG = {
+  TRASH_COUNT: 6,            // Сколько предметов мусора за игру
+  TRASH_SIZE: 68,            // Базовый размер (под стиль)
+  TRASH_IMG: 'images/trash.png',
+};
+
+// Звуки (лежать в КОРНЕ рядом с index.html!)
 const sounds = {
-  bg: new Audio('bg-music.mp3'),
+  bg:    new Audio('bg-music.mp3'),
   click: new Audio('click-trash.mp3'),
   start: new Audio('start.mp3'),
-  win: new Audio('win.mp3')
+  win:   new Audio('win.mp3'),
 };
 sounds.bg.loop = true;
+for (const key in sounds) sounds[key].preload = 'auto';
 
-// --- Элементы ---
-const startBtn = document.getElementById('startBtn');
-const message = document.getElementById('message');
-const scoreEl = document.getElementById('score');
-const targetEl = document.getElementById('target');
-const trashes = document.querySelectorAll('.trash');
+// ---------------------------
+//   ЭЛЕМЕНТЫ И ПЕРЕМЕННЫЕ
+// ---------------------------
+const startBtn   = document.getElementById('startBtn');
+const messageEl  = document.getElementById('message');
+const scoreEl    = document.getElementById('score');
+const targetEl   = document.getElementById('target');
+const trashRoot  = document.getElementById('trash-container');
+const bgLayer    = document.getElementById('bg-layer');
+const forestLayer= document.getElementById('forest-layer');
 
 let score = 0;
-let target = trashes.length;
+let target = CONFIG.TRASH_COUNT;
+let started = false;
 
-// обновление счёта
-function updateScore() {
-  scoreEl.textContent = score;
-  targetEl.textContent = target;
+// ---------------------------
+//   ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ---------------------------
+function setMessage(text, timeout=2500){
+  messageEl.textContent = text;
+  messageEl.classList.remove('hidden');
+  if (timeout) setTimeout(()=>messageEl.classList.add('hidden'), timeout);
 }
 
-// победа
-function winGame() {
-  sounds.bg.pause();
-  sounds.bg.currentTime = 0;
-  sounds.win.play();
-
-  message.textContent = '🎉 Перемога! Ти очистив ліс!';
-  message.classList.remove('hidden');
-  message.style.background = 'rgba(0,150,0,0.7)';
-  message.style.color = 'white';
-  message.style.fontSize = '22px';
+function updateHUD(){
+  scoreEl.textContent = String(score);
+  targetEl.textContent = String(target);
 }
 
-// старт игры
-startBtn.addEventListener('click', () => {
-  score = 0;
-  updateScore();
-
-  sounds.start.currentTime = 0;
-  sounds.start.play();
-
-  sounds.bg.currentTime = 0;
-  sounds.bg.play().catch(err => console.log("bg music blocked:", err));
-
-  message.textContent = 'Гра почалася! Збирай сміття!';
-  message.classList.remove('hidden');
-  setTimeout(() => message.classList.add('hidden'), 3000);
-
-  // делаем весь мусор снова видимым
-  trashes.forEach(t => t.style.display = 'block');
-});
-
-// клик по мусору
-trashes.forEach(trash => {
-  trash.addEventListener('click', () => {
-    trash.style.display = 'none';
-    score++;
-    sounds.click.currentTime = 0;
-    sounds.click.play();
-    updateScore();
-
-    if (score >= target) {
-      winGame();
+function playSafe(audio){
+  try{
+    audio.currentTime = 0;
+    const res = audio.play();
+    if (res && typeof res.then === 'function') {
+      res.catch(()=>{}); // тихо игнорим блокировку автоплея
     }
-  });
-});
+  }catch(e){}
+}
 
-// начальная инициализация
-updateScore();
-
-// --- Параллакс ---
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 20;
-  const y = (e.clientY / window.innerHeight - 0.5) * 20;
-
-  document.getElementById('bg-layer').style.transform = `translate(${x}px, ${y}px)`;
-  document.getElementById('forest-layer').style.transform = `translate(${x * 2}px, ${y * 2}px)`;
-});
+// Случайная позиция внутри сцены (без выхода за края)
+function randomPos(){
+  const pad = 20; // отступ от краёв
+  const gw = trashRoot.clientWidth;
+  const gh = trashRoot.clientHeight;
+  const w = CONFIG.TRASH_SIZE;
+  const h = CONFIG.TRASH_SIZE;
+  const x = Math.random() * (gw - w - pad*2) + pad;
+  const y = Math
