@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Green Quest</title>
-  <!-- Убираем 404 favicon -->
-  <link rel="icon" href="data:," />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="gameArea">
-    <!-- Слои фона для параллакса -->
-    <div id="bg-layer" aria-hidden="true"></div>
-    <div id="forest-layer" aria-hidden="true"></div>
+  <div id="game-container">
+    <!-- Фоновые слои -->
+    <div id="forest-layer"></div>
+    <div id="trees-layer"></div>
+
+    <!-- Игровая зона -->
+    <div id="game-area"></div>
 
     <!-- HUD -->
     <div id="hud">
-      <div id="scoreBox">Очки: <span id="score">0</span>/<span id="target">0</span></div>
-      <button id="startBtn" class="btn">Start</button>
-      <div id="message" class="hidden"></div>
+      <button id="start-btn">Start</button>
+      <p id="score">Score: 0</p>
     </div>
-
-    <!-- Контейнер, куда JS будет подкидывать мусор -->
-    <div id="trash-container"></div>
   </div>
 
-  <script src="script.js" defer></script>
+  <!-- Победное сообщение -->
+  <div id="win-message">
+    <h1>🎉 You Win! 🎉</h1>
+    <button id="restart-btn">Play Again</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
