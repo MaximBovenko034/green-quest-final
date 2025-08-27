@@ -1,11 +1,11 @@
-// Конфиг
+// Конфигурация
 const CONFIG = {
   TRASH_COUNT: 6,
   TRASH_SIZE: 68,
   TRASH_IMG: 'images/trash.png',
 };
 
-// Элементы
+// DOM элементы
 const gameArea = document.getElementById("game-area");
 const startBtn = document.getElementById("start-btn");
 const scoreEl = document.getElementById("score");
@@ -20,7 +20,7 @@ const clickSound = new Audio("click-trash.mp3");
 const startSound = new Audio("start.mp3");
 const winSound = new Audio("win.mp3");
 
-// Настройки музыки
+// Музыка зациклена
 bgMusic.loop = true;
 
 let score = 0;
@@ -33,9 +33,9 @@ function startGame() {
   winMessage.style.display = "none";
 
   startSound.play();
+  bgMusic.currentTime = 0;
   bgMusic.play();
 
-  // Добавляем мусор
   for (let i = 0; i < CONFIG.TRASH_COUNT; i++) {
     createTrash();
   }
@@ -54,6 +54,7 @@ function createTrash() {
     clickSound.play();
     score++;
     scoreEl.textContent = "Score: " + score;
+
     if (score === CONFIG.TRASH_COUNT) {
       winGame();
     }
@@ -69,7 +70,7 @@ function winGame() {
   winMessage.style.display = "flex";
 }
 
-// Параллакс-эффект
+// Параллакс
 document.addEventListener("mousemove", (e) => {
   const x = (e.clientX / window.innerWidth) - 0.5;
   const y = (e.clientY / window.innerHeight) - 0.5;
