@@ -1,34 +1,101 @@
+// --- звуки ---
+const sounds = {
+  bg: new Audio('bg-music.mp3'),
+  click: new Audio('click-trash.mp3'),
+  start: new Audio('start.mp3'),
+  win: new Audio('win.mp3'),
+};
 
+// зацикливаем фоновую музыку
+sounds.bg.loop = true;
+
+// --- элементы интерфейса ---
 const startBtn = document.getElementById('startBtn');
 const gameArea = document.getElementById('gameArea');
-const scoreEl = document.getElementById('score');
+const message = document.getElementById('message');
+const scoreSpan = document.getElementById('score');
+const targetSpan = document.getElementById('target');
 
+// --- игровые переменные ---
 let score = 0;
-let totalTrash = 5;
-let winSound = new Audio('win.mp3');
-let clickSound = new Audio('click-trash.mp3');
+let targetScore = 0; // сколько всего мусора
+let started = false;
 
-function startGame() {
-  score = 0;
-  scoreEl.textContent = score;
-  gameArea.innerHTML = '';
-  for (let i = 0; i < totalTrash; i++) {
-    const trash = document.createElement('div');
-    trash.classList.add('trash');
-    trash.style.top = Math.random() * (gameArea.clientHeight - 80) + 'px';
-    trash.style.left = Math.random() * (gameArea.clientWidth - 80) + 'px';
-    trash.addEventListener('click', () => {
-      clickSound.play();
-      trash.remove();
-      score++;
-      scoreEl.textContent = score;
-      if (score === totalTrash) {
-        winSound.play();
-        alert('Вітаю! Ви прибрали все сміття!');
-      }
-    });
-    gameArea.appendChild(trash);
-  }
+// --- функция обновления счёта ---
+function updateScore() {
+  scoreSpan.textContent = score;
 }
 
-startBtn.addEventListener('click', startGame);
+// --- функция победы ---
+function winGame() {
+  started = false;
+
+  // остановить фоновую музыку
+  sounds.bg.pause();
+  sounds.bg.currentTime = 0;
+
+  // звук победы
+  sounds.win.currentTime = 0;
+  sounds.win.play();
+
+  // сообщение
+  message.textContent = '🎉 Победа! Ты очистил ліс!';
+  message.classList.remove('hidden');
+  message.style.background = 'rgba(0,150,0,0.7)';
+  message.style.fontSize = '22px';
+}
+
+// --- запуск игры ---
+startBtn.addEventListener('click', function () {
+  // сброс состояния
+  started = true;
+  score = 0;
+  updateScore();
+
+  // звук старта
+  sounds.start.currentTime = 0;
+  sounds.start.play();
+
+  // запуск фоновой музыки
+  sounds.bg.currentTime = 0;
+  sounds.bg.play().catch(err => {
+    console.log('Музыка не стартанула автоматически:', err);
+  });
+
+  // показать сообщение
+  message.textContent = 'Гра почалася! Убирай сміття 🙂';
+  message.classList.remove('hidden');
+  setTimeout(() => message.classList.add('hidden'), 3000);
+
+  // найти все мусорные элементы
+  const trashes = document.querySelectorAll('.trash');
+  targetScore = trashes.length;
+  targetSpan.textContent = targetScore;
+
+  // очистить прошлые обработчики и добавить новые
+  trashes.forEach(trash => {
+    trash.style.display = 'block'; // показать мусор снова
+    const newTrash = trash.cloneNode(true); // клонируем чтобы убрать старый listener
+    trash.parentNode.replaceChild(newTrash, trash);
+
+    newTrash.addEventListener('click', function () {
+      if (!started) return;
+
+      // звук клика
+      sounds.click.currentTime = 0;
+      sounds.click.play();
+
+      // скрыть мусор
+      newTrash.style.display = 'none';
+
+      // увеличить очки
+      score++;
+      updateScore();
+
+      // проверка на победу
+      if (score >= targetScore) {
+        winGame();
+      }
+    });
+  });
+});
