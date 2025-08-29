@@ -1,71 +1,124 @@
-
 :root{
   --hud-padding: 12px;
   --btn-font: clamp(14px, 2.4vw, 18px);
   --trash-size: clamp(48px, 7vw, 72px);
 }
-*{ box-sizing:border-box; }
-html, body{ height:100%; }
+
+*{ box-sizing: border-box; }
+html, body { height: 100%; }
+
 body{
-  margin:0;
+  margin: 0;
   font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  background:#bfe3ff;
-  overflow:hidden;
+  background: #bfe3ff;
+  overflow: hidden;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation; /* допомагає для мобільних */
 }
+
+/* Контейнер */
 #game-container{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   contain: layout paint size;
 }
+
+/* Фонові шари */
 #forest-layer, #trees-layer{
-  position:absolute;
-  inset:0;
-  background-size:cover;
-  background-position:center;
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
   will-change: transform;
+  transition: transform 300ms linear;
 }
-#forest-layer{ background-image:url('images/forest-background.jpg'); z-index:0; }
-#trees-layer { background-image:url('images/trees-mid.png'); z-index:1; }
+#forest-layer { background-image: url('images/forest-background.jpg'); z-index: 0; }
+#trees-layer  { background-image: url('images/trees-mid.png'); z-index: 1; }
+
+/* Ігрова зона */
 #game-area{
-  position:relative;
-  width:100%; height:100%;
-  z-index:2;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
   touch-action: manipulation;
 }
+
+/* Сміття */
 .trash{
-  position:absolute;
-  width:var(--trash-size);
-  height:var(--trash-size);
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-drag:none;
-  image-rendering:auto;
+  position: absolute;
+  width: var(--trash-size);
+  height: var(--trash-size);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  image-rendering: auto;
+  transition: transform 280ms ease, opacity 280ms ease;
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
+
+/* Клас для кліка - анімація перед видаленням */
+.trash.hit {
+  transform: scale(0.5) rotate(-15deg);
+  opacity: 0;
+}
+
+/* HUD */
 #hud{
-  position:absolute; top:10px; left:10px;
-  z-index:3; display:flex; gap:10px; align-items:center;
-  padding:var(--hud-padding);
-  background:rgba(0,0,0,0.15); border-radius:10px;
-  backdrop-filter: blur(4px); color:#fff;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: var(--hud-padding);
+  background: rgba(0,0,0,0.15);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+  color: #fff;
 }
+
 #start-btn, #restart-btn{
-  padding:10px 16px; border:0; border-radius:10px;
-  font-weight:600; font-size:var(--btn-font);
-  background:#2e7d32; color:#fff;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: var(--btn-font);
+  background: #2e7d32;
+  color: #fff;
 }
-#start-btn:hover, #restart-btn:hover{ background:#1b5e20; }
+#start-btn:hover, #restart-btn:hover { background: #1b5e20; }
+
+/* Вікно перемоги */
 #win-message{
-  position:fixed; inset:0; display:none;
-  place-content:center; place-items:center; gap:12px;
-  background:rgba(0,0,0,0.6); color:#fff; z-index:4;
-  text-align:center; padding:24px;
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-content: center;
+  place-items: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  z-index: 4;
+  text-align: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 300ms ease;
 }
-#win-message.show{ display:grid; }
+#win-message.show { display: grid; opacity: 1; }
+
+/* Адаптив для дуже малих екранів */
 @media (max-width: 400px){
   :root{ --trash-size: clamp(40px, 12vw, 56px); }
+  #hud { top: 6px; left: 6px; padding: 8px; }
 }
+
+/* Якщо користувач вимагає reduced motion - відключаємо рухи */
 @media (prefers-reduced-motion: reduce){
-  #forest-layer, #trees-layer{ transition:none !important; transform:none !important; }
+  #forest-layer, #trees-layer { transition: none !important; transform: none !important; }
+  .trash { transition: none !important; }
 }
