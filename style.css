@@ -1,64 +1,43 @@
-body {
+body, html {
   margin: 0;
+  padding: 0;
   overflow: hidden;
-  font-family: Arial, sans-serif;
-}
-
-.hud {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.6);
-  padding: 10px;
-  border-radius: 8px;
-}
-
-button {
-  padding: 5px 10px;
-  border: none;
-  background: green;
-  color: white;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.parallax {
-  position: absolute;
-  width: 100%;
   height: 100%;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.layer {
-  position: absolute;
-  width: 200%;
-  height: 100%;
-  background-repeat: repeat-x;
-}
-
-.background {
-  background-image: url("images/forest-background.jpg");
-  background-size: cover;
-  z-index: -3;
-}
-
-.trees {
-  background-image: url("images/trees-mid.png");
-  background-size: contain;
-  background-repeat: repeat-x;
-  z-index: -2;
-  opacity: 0.9;
 }
 
 #game {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  background: skyblue;
+}
+
+#background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("images/forest-background.png") repeat-x;
+  background-size: cover;
   z-index: 1;
+}
+
+#trees {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("images/trees-mid.png") repeat-x;
+  background-size: cover;
+  z-index: 2;
+}
+
+#clouds {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("images/clouds.png") repeat-x;
+  background-size: cover;
+  z-index: 3;
 }
 
 .trash {
@@ -68,5 +47,31 @@ button {
   background-image: url("images/trash.png");
   background-size: contain;
   background-repeat: no-repeat;
+  background-color: transparent; /* 👈 убираем белый квадрат */
+  pointer-events: auto;
   cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 5;
+}
+
+.trash.clicked {
+  transform: scale(1.5) rotate(20deg);
+  opacity: 0;
+}
+
+#startBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  z-index: 10;
+}
+
+#score {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+  z-index: 10;
 }
