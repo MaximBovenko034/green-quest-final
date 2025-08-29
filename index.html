@@ -1,31 +1,29 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta charset="UTF-8">
   <title>Green Quest</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="preload" href="images/forest-background.jpg" as="image" />
-  <link rel="preload" href="images/trees-mid.png" as="image" />
-  <link rel="preload" href="images/trash.png" as="image" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="game-container">
-    <div id="forest-layer" aria-hidden="true"></div>
-    <div id="trees-layer" aria-hidden="true"></div>
-    <div id="game-area" role="application" aria-label="Міні-гра з прибирання сміття"></div>
-    <div id="hud">
-      <button id="start-btn" aria-label="Почати гру">Start</button>
-      <p id="score" aria-live="polite">Score: 0</p>
-    </div>
+  <div class="hud">
+    <button id="startBtn">Start</button>
+    <span id="score">Score: 0</span>
   </div>
 
-  <div id="win-message" role="dialog" aria-modal="true" aria-labelledby="win-title" aria-hidden="true">
-    <h1 id="win-title">🎉 You Win! 🎉</h1>
-    <button id="restart-btn" aria-label="Зіграти ще раз">Play Again</button>
+  <div class="parallax">
+    <div class="layer background"></div>
+    <div class="layer trees"></div>
+    <div class="layer clouds"></div>
   </div>
 
-  <script src="script.js" defer></script>
+  <div id="game"></div>
+
+  <audio id="bgMusic" src="bg-music.mp3" loop></audio>
+  <audio id="clickSound" src="click-trash.mp3"></audio>
+  <audio id="startSound" src="start.mp3"></audio>
+  <audio id="winSound" src="win.mp3"></audio>
+
+  <script src="script.js"></script>
 </body>
 </html>
