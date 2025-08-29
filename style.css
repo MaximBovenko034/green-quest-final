@@ -1,71 +1,111 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: #000;
+  touch-action: manipulation; /* отключает двойной тап-зум */
+}
 
-:root{
-  --hud-padding: 12px;
-  --btn-font: clamp(14px, 2.4vw, 18px);
-  --trash-size: clamp(48px, 7vw, 72px);
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
-*{ box-sizing:border-box; }
-html, body{ height:100%; }
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  background:#bfe3ff;
-  overflow:hidden;
-}
-#game-container{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  contain: layout paint size;
-}
-#forest-layer, #trees-layer{
-  position:absolute;
-  inset:0;
-  background-size:cover;
-  background-position:center;
+
+/* Фоновые слои */
+#forest-layer, #trees-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110%;
+  height: 110%;
+  background-size: cover;
+  background-position: center;
   will-change: transform;
 }
-#forest-layer{ background-image:url('images/forest-background.jpg'); z-index:0; }
-#trees-layer { background-image:url('images/trees-mid.png'); z-index:1; }
-#game-area{
-  position:relative;
-  width:100%; height:100%;
-  z-index:2;
-  touch-action: manipulation;
+
+#forest-layer {
+  background-image: url('images/forest-background.jpg');
+  z-index: 0;
 }
-.trash{
-  position:absolute;
-  width:var(--trash-size);
-  height:var(--trash-size);
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-drag:none;
-  image-rendering:auto;
+
+#trees-layer {
+  background-image: url('images/trees-mid.png');
+  z-index: 1;
 }
-#hud{
-  position:absolute; top:10px; left:10px;
-  z-index:3; display:flex; gap:10px; align-items:center;
-  padding:var(--hud-padding);
-  background:rgba(0,0,0,0.15); border-radius:10px;
-  backdrop-filter: blur(4px); color:#fff;
+
+/* Игровая зона */
+#game-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 }
-#start-btn, #restart-btn{
-  padding:10px 16px; border:0; border-radius:10px;
-  font-weight:600; font-size:var(--btn-font);
-  background:#2e7d32; color:#fff;
+
+/* Мусор */
+.trash {
+  position: absolute;
+  width: clamp(40px, 7vw, 70px);
+  height: clamp(40px, 7vw, 70px);
+  cursor: pointer;
+  transition: transform 0.3s, opacity 0.3s;
 }
-#start-btn:hover, #restart-btn:hover{ background:#1b5e20; }
-#win-message{
-  position:fixed; inset:0; display:none;
-  place-content:center; place-items:center; gap:12px;
-  background:rgba(0,0,0,0.6); color:#fff; z-index:4;
-  text-align:center; padding:24px;
+.trash.clicked {
+  transform: scale(0.5);
+  opacity: 0;
 }
-#win-message.show{ display:grid; }
-@media (max-width: 400px){
-  :root{ --trash-size: clamp(40px, 12vw, 56px); }
+
+/* HUD */
+#hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  z-index: 3;
 }
-@media (prefers-reduced-motion: reduce){
-  #forest-layer, #trees-layer{ transition:none !important; transform:none !important; }
+
+#start-btn, #restart-btn {
+  padding: 10px 20px;
+  border: none;
+  background: green;
+  color: white;
+  cursor: pointer;
+  font-size: clamp(14px, 2vw, 18px);
+  border-radius: 5px;
+}
+
+#start-btn:hover, #restart-btn:hover {
+  background: darkgreen;
+}
+
+/* Сообщение о победе */
+#win-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+#win-message.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  #hud {
+    top: 5px;
+    left: 5px;
+  }
 }
