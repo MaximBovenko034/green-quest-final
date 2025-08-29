@@ -1,48 +1,48 @@
-let score = 0;
-let gameInterval;
-const game = document.getElementById("game");
-const scoreDisplay = document.getElementById("score");
 const startBtn = document.getElementById("startBtn");
-
-// Звуки
+const scoreDisplay = document.getElementById("score");
 const bgMusic = document.getElementById("bgMusic");
 const clickSound = document.getElementById("clickSound");
-const startSound = document.getElementById("startSound");
 const winSound = document.getElementById("winSound");
 
+let score = 0;
+let gameInterval;
+
+// 🎵 Запуск музыки
 function startGame() {
   score = 0;
-  scoreDisplay.textContent = "Score: 0";
-  game.innerHTML = "";
+  scoreDisplay.textContent = "Score: " + score;
+  bgMusic.currentTime = 0;
   bgMusic.play();
-  startSound.play();
 
-  gameInterval = setInterval(spawnTrash, 1500);
+  clearInterval(gameInterval);
+  gameInterval = setInterval(spawnTrash, 2000);
 }
 
-// Спавн мусора
+// 📌 Создание мусора
 function spawnTrash() {
   const trash = document.createElement("div");
   trash.classList.add("trash");
   trash.style.left = Math.random() * (window.innerWidth - 50) + "px";
   trash.style.top = "-60px";
-  game.appendChild(trash);
+  document.getElementById("game").appendChild(trash);
 
   let fallInterval = setInterval(() => {
     let top = parseInt(trash.style.top);
-    if (top > window.innerHeight) {
+    if (top > window.innerHeight - 50) {
       clearInterval(fallInterval);
       trash.remove();
     } else {
-      trash.style.top = top + 4 + "px";
+      trash.style.top = top + 5 + "px";
     }
-  }, 20);
+  }, 50);
 
-  trash.addEventListener("click", () => {
+  function collectTrash() {
     score++;
     scoreDisplay.textContent = "Score: " + score;
     clickSound.play();
-    trash.remove();
+
+    trash.classList.add("clicked");
+    setTimeout(() => trash.remove(), 300);
 
     if (score >= 10) {
       clearInterval(gameInterval);
@@ -50,22 +50,21 @@ function spawnTrash() {
       alert("🎉 Ты победил!");
       bgMusic.pause();
     }
-  });
-}
+  }
 
-// Параллакс
-function applyParallax() {
-  const bg = document.querySelector(".background");
-  const trees = document.querySelector(".trees");
-
-  let offset = 0;
-
-  setInterval(() => {
-    offset -= 1;
-    bg.style.backgroundPositionX = offset * 0.3 + "px";
-    trees.style.backgroundPositionX = offset + "px";
-  }, 30);
+  // ✅ ПК + телефон
+  trash.addEventListener("click", collectTrash);
+  trash.addEventListener("touchstart", collectTrash);
 }
 
 startBtn.addEventListener("click", startGame);
-applyParallax();
+
+// 🌲 Параллакс
+window.addEventListener("scroll", applyParallax);
+
+function applyParallax() {
+  let scrollY = window.scrollY;
+  document.getElementById("background").style.transform = `translateY(${scrollY * 0.3}px)`;
+  document.getElementById("trees").style.transform = `translateY(${scrollY * 0.6}px)`;
+  document.getElementById("clouds").style.transform = `translateY(${scrollY * 0.9}px)`;
+}
