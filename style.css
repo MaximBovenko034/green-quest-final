@@ -3,6 +3,7 @@ body, html {
   padding: 0;
   overflow: hidden;
   height: 100%;
+  font-family: Arial, sans-serif;
 }
 
 #game {
@@ -31,15 +32,6 @@ body, html {
   z-index: 2;
 }
 
-#clouds {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("images/clouds.png") repeat-x;
-  background-size: cover;
-  z-index: 3;
-}
-
 .trash {
   position: absolute;
   width: 50px;
@@ -47,7 +39,7 @@ body, html {
   background-image: url("images/trash.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: transparent; /* 👈 убираем белый квадрат */
+  background-color: transparent;
   pointer-events: auto;
   cursor: pointer;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -63,9 +55,20 @@ body, html {
   position: absolute;
   top: 20px;
   left: 20px;
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 18px;
+  font-weight: bold;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
   z-index: 10;
+  transition: background 0.3s ease;
+}
+
+#startBtn:hover {
+  background: #45a049;
 }
 
 #score {
@@ -73,5 +76,8 @@ body, html {
   top: 20px;
   right: 20px;
   font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 3px black;
   z-index: 10;
 }
