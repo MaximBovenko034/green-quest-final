@@ -2,18 +2,24 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Важливо: user-scalable=no допомагає блокувати pinch-to-zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <title>Green Quest</title>
+
+  <!-- Preload ключових зображень -->
   <link rel="preload" href="images/forest-background.jpg" as="image" />
   <link rel="preload" href="images/trees-mid.png" as="image" />
   <link rel="preload" href="images/trash.png" as="image" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="game-container">
     <div id="forest-layer" aria-hidden="true"></div>
     <div id="trees-layer" aria-hidden="true"></div>
+
     <div id="game-area" role="application" aria-label="Міні-гра з прибирання сміття"></div>
+
     <div id="hud">
       <button id="start-btn" aria-label="Почати гру">Start</button>
       <p id="score" aria-live="polite">Score: 0</p>
@@ -25,6 +31,7 @@
     <button id="restart-btn" aria-label="Зіграти ще раз">Play Again</button>
   </div>
 
+  <!-- Скрипт в кінці, defer у вас вже був, можна без нього -->
   <script src="script.js" defer></script>
 </body>
 </html>
