@@ -1,31 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Green Quest</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="hud">
+  <div id="game">
     <button id="startBtn">Start</button>
-    <span id="score">Score: 0</span>
+    <div id="score">Score: 0</div>
+    <div id="background"></div>
+    <div id="trees"></div>
+    <div id="clouds"></div>
   </div>
 
-  <!-- Параллакс -->
-  <div class="parallax">
-    <div class="layer background"></div>
-    <div class="layer trees"></div>
-  </div>
-
-  <!-- Игровое поле -->
-  <div id="game"></div>
-
-  <!-- Звуки -->
-  <audio id="bgMusic" src="bg-music.mp3" loop></audio>
-  <audio id="clickSound" src="click-trash.mp3"></audio>
-  <audio id="startSound" src="start.mp3"></audio>
-  <audio id="winSound" src="win.mp3"></audio>
+  <audio id="bgMusic" src="sounds/bg-music.mp3" loop></audio>
+  <audio id="clickSound" src="sounds/click.mp3"></audio>
+  <audio id="winSound" src="sounds/win.mp3"></audio>
 
   <script src="script.js"></script>
 </body>
