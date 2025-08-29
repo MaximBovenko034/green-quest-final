@@ -1,111 +1,100 @@
-// Конфигурация
+
 const CONFIG = {
   TRASH_COUNT: 5,
-  TRASH_IMG: 'images/trash.png'
+  IMG_SIZE: null,
+  TRASH_IMG: 'images/trash.png',
 };
+const gameArea = document.getElementById('game-area');
+const startBtn = document.getElementById('start-btn');
+const scoreEl = document.getElementById('score');
+const winMessage = document.getElementById('win-message');
+const restartBtn = document.getElementById('restart-btn');
+const forestLayer = document.getElementById('forest-layer');
+const treesLayer  = document.getElementById('trees-layer');
 
-// DOM элементы
-const gameArea = document.getElementById("game-area");
-const startBtn = document.getElementById("start-btn");
-const scoreEl = document.getElementById("score");
-const winMessage = document.getElementById("win-message");
-const restartBtn = document.getElementById("restart-btn");
-const forestLayer = document.getElementById("forest-layer");
-const treesLayer = document.getElementById("trees-layer");
-
-// Звуки
-const bgMusic = new Audio("bg-music.mp3");
-const clickSound = new Audio("click-trash.mp3");
-const startSound = new Audio("start.mp3");
-const winSound = new Audio("win.mp3");
-
+const bgMusic   = new Audio('bg-music.mp3');
+const clickSfx  = new Audio('click-trash.mp3');
+const startSfx  = new Audio('start.mp3');
+const winSfx    = new Audio('win.mp3');
 bgMusic.loop = true;
 
 let score = 0;
-let parallaxX = 0, parallaxY = 0;
+let isRunning = false;
 
-// Старт игры
-function startGame() {
+function readTrashSize(){
+  const val = getComputedStyle(document.documentElement).getPropertyValue('--trash-size').trim();
+  const px = parseFloat(val);
+  CONFIG.IMG_SIZE = isNaN(px) ? 64 : px;
+}
+
+function startGame(){
+  readTrashSize();
   score = 0;
-  scoreEl.textContent = "Score: " + score;
-  gameArea.innerHTML = "";
-  winMessage.classList.remove("show");
+  scoreEl.textContent = 'Score: ' + score;
+  gameArea.innerHTML = '';
+  winMessage.classList.remove('show');
+  winMessage.setAttribute('aria-hidden','true');
+  try{ startSfx.currentTime = 0; startSfx.play(); }catch(e){}
+  try{ bgMusic.currentTime = 0; bgMusic.play(); }catch(e){}
 
-  startSound.play();
-  bgMusic.currentTime = 0;
-  bgMusic.play();
+  const bounds = gameArea.getBoundingClientRect();
+  for(let i=0;i<CONFIG.TRASH_COUNT;i++){
+    const img = document.createElement('img');
+    img.src = CONFIG.TRASH_IMG;
+    img.className = 'trash';
+    img.width = CONFIG.IMG_SIZE;
+    img.height = CONFIG.IMG_SIZE;
 
-  for (let i = 0; i < CONFIG.TRASH_COUNT; i++) {
-    createTrash();
+    const maxX = bounds.width - CONFIG.IMG_SIZE;
+    const maxY = bounds.height - CONFIG.IMG_SIZE;
+    img.style.left = Math.max(0, Math.random()*maxX) + 'px';
+    img.style.top  = Math.max(0, Math.random()*maxY) + 'px';
+
+    const onHit = () => {
+      img.remove();
+      try{ clickSfx.currentTime = 0; clickSfx.play(); }catch(e){}
+      score++;
+      scoreEl.textContent = 'Score: ' + score;
+      if(score === CONFIG.TRASH_COUNT){
+        winGame();
+      }
+    };
+    img.addEventListener('click', onHit, { passive:true });
+    img.addEventListener('touchstart', (e)=>{ e.preventDefault(); onHit(); }, { passive:false });
+
+    gameArea.appendChild(img);
   }
+  isRunning = true;
 }
 
-// Создание мусора
-function createTrash() {
-  const trash = document.createElement("img");
-  trash.src = CONFIG.TRASH_IMG;
-  trash.classList.add("trash");
-
-  const gameRect = gameArea.getBoundingClientRect();
-  const size = parseInt(getComputedStyle(trash).width);
-  trash.style.left = Math.random() * (gameRect.width - size) + "px";
-  trash.style.top = Math.random() * (gameRect.height - size) + "px";
-
-  trash.addEventListener("click", () => {
-    trash.classList.add("clicked");
-    clickSound.play();
-    setTimeout(() => trash.remove(), 300);
-    score++;
-    scoreEl.textContent = "Score: " + score;
-
-    if (score === CONFIG.TRASH_COUNT) {
-      winGame();
-    }
-  });
-
-  gameArea.appendChild(trash);
+function winGame(){
+  try{ bgMusic.pause(); }catch(e){}
+  try{ winSfx.currentTime = 0; winSfx.play(); }catch(e){}
+  winMessage.classList.add('show');
+  winMessage.setAttribute('aria-hidden','false');
+  isRunning = false;
 }
 
-// Победа
-function winGame() {
-  bgMusic.pause();
-  winSound.play();
-  winMessage.classList.add("show");
-}
-
-// Параллакс для ПК
-document.addEventListener("mousemove", (e) => {
+let rafId = null;
+let targetX = 0, targetY = 0;
+function onPointer(e){
   const x = (e.clientX / window.innerWidth) - 0.5;
   const y = (e.clientY / window.innerHeight) - 0.5;
-  parallaxX = x;
-  parallaxY = y;
-});
-
-// Параллакс для телефонов (гироскоп)
-if (window.DeviceOrientationEvent) {
-  window.addEventListener("deviceorientation", (e) => {
-    const x = e.gamma / 45; // наклон влево/вправо
-    const y = e.beta / 45;  // наклон вперёд/назад
-    parallaxX = x * 0.5;
-    parallaxY = y * 0.5;
-  }, true);
+  targetX = x; targetY = y;
+  if(!rafId){ rafId = requestAnimationFrame(applyParallax); }
 }
-
-// Анимация параллакса
-function animateParallax() {
-  forestLayer.style.transform = `translate(${parallaxX * 30}px, ${parallaxY * 30}px)`;
-  treesLayer.style.transform = `translate(${parallaxX * 60}px, ${parallaxY * 60}px)`;
-  requestAnimationFrame(animateParallax);
+function applyParallax(){
+  forestLayer.style.transform = `translate(${targetX*24}px, ${targetY*24}px)`;
+  treesLayer.style.transform  = `translate(${targetX*48}px, ${targetY*48}px)`;
+  rafId = null;
 }
-animateParallax();
+document.addEventListener('mousemove', onPointer, { passive:true });
 
-// Кнопки
-startBtn.addEventListener("click", startGame);
-restartBtn.addEventListener("click", startGame);
+startBtn.addEventListener('click', startGame);
+restartBtn.addEventListener('click', startGame);
 
-// Блокировка масштабирования на мобильных
-document.addEventListener('touchmove', function(event) {
-  if (event.scale !== 1) {
-    event.preventDefault();
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden && !isRunning){
+    try{ bgMusic.pause(); }catch(e){}
   }
-}, { passive: false });
+});
