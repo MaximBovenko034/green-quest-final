@@ -1,75 +1,76 @@
-:root{
-  --hud-padding: 12px;
-  --btn-font: clamp(14px, 2.4vw, 18px);
-  --trash-size: clamp(48px, 7vw, 72px);
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
 }
-*{ box-sizing:border-box; }
-html, body{ height:100%; }
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  background:#bfe3ff;
-  overflow:hidden;
+
+.hud {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 10;
 }
-#game-container{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  contain: layout paint size;
+
+#startBtn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #2ecc71;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
 }
-#forest-layer, #trees-layer{
-  position:absolute;
-  inset:0;
-  background-size:cover;
-  background-position:center;
-  will-change: transform;
+
+#score {
+  margin-left: 20px;
+  font-weight: bold;
 }
-#forest-layer{ background-image:url('images/forest-background.jpg'); z-index:0; }
-#trees-layer { background-image:url('images/trees-mid.png'); z-index:1; }
-#game-area{
-  position:relative;
-  width:100%; height:100%;
-  z-index:2;
-  touch-action: manipulation;
+
+.parallax {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
-.trash{
-  position:absolute;
-  width:var(--trash-size);
-  height:var(--trash-size);
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-drag:none;
-  image-rendering:auto;
-  transition: transform 0.28s, opacity 0.28s;
+
+.layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: cover;
 }
-.trash.hit {
-  transform: scale(0.4);
-  opacity: 0;
+
+.background {
+  background-image: url("images/forest-background.jpg");
 }
-#hud{
-  position:absolute; top:10px; left:10px;
-  z-index:3; display:flex; gap:10px; align-items:center;
-  padding:var(--hud-padding);
-  background:rgba(0,0,0,0.15); border-radius:10px;
-  backdrop-filter: blur(4px); color:#fff;
+
+.trees {
+  background-image: url("images/trees-mid.png");
 }
-#start-btn, #restart-btn{
-  padding:10px 16px; border:0; border-radius:10px;
-  font-weight:600; font-size:var(--btn-font);
-  background:#2e7d32; color:#fff;
+
+.clouds {
+  background-image: linear-gradient(to bottom, #bfe3ff 0%, #ffffff 100%);
+  opacity: 0.5;
 }
-#start-btn:hover, #restart-btn:hover{ background:#1b5e20; }
-#win-message{
-  position:fixed; inset:0; display:none;
-  place-content:center; place-items:center; gap:12px;
-  background:rgba(0,0,0,0.6); color:#fff; z-index:4;
-  text-align:center; padding:24px;
+
+#game {
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
-#win-message.show{ display:grid; }
-@media (max-width: 400px){
-  :root{ --trash-size: clamp(40px, 12vw, 56px); }
-}
-@media (prefers-reduced-motion: reduce){
-  #forest-layer, #trees-layer{ transition:none !important; transform:none !important; }
+
+.trash {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
 }
