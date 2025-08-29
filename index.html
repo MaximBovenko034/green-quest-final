@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Green Quest</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:,">
 </head>
 <body>
   <div class="hud">
@@ -11,14 +12,16 @@
     <span id="score">Score: 0</span>
   </div>
 
+  <!-- Параллакс -->
   <div class="parallax">
     <div class="layer background"></div>
     <div class="layer trees"></div>
-    <div class="layer clouds"></div>
   </div>
 
+  <!-- Игровое поле -->
   <div id="game"></div>
 
+  <!-- Звуки -->
   <audio id="bgMusic" src="bg-music.mp3" loop></audio>
   <audio id="clickSound" src="click-trash.mp3"></audio>
   <audio id="startSound" src="start.mp3"></audio>
