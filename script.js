@@ -1,66 +1,71 @@
 let score = 0;
+let gameInterval;
 const game = document.getElementById("game");
-const scoreEl = document.getElementById("score");
+const scoreDisplay = document.getElementById("score");
 const startBtn = document.getElementById("startBtn");
 
+// Звуки
 const bgMusic = document.getElementById("bgMusic");
 const clickSound = document.getElementById("clickSound");
 const startSound = document.getElementById("startSound");
 const winSound = document.getElementById("winSound");
 
-let trashCount = 5;
-
-// Функція старту гри
-startBtn.addEventListener("click", async () => {
+function startGame() {
   score = 0;
-  scoreEl.textContent = "Score: 0";
+  scoreDisplay.textContent = "Score: 0";
   game.innerHTML = "";
+  bgMusic.play();
+  startSound.play();
 
-  // запуск звуків
-  try {
-    await startSound.play();
-    await bgMusic.play();
-  } catch (e) {
-    console.log("Автовідтворення заблоковане, але звук запуститься після кліку.");
-  }
-
-  spawnTrash(trashCount);
-});
-
-// Спавн сміття
-function spawnTrash(count) {
-  for (let i = 0; i < count; i++) {
-    const trash = document.createElement("img");
-    trash.src = "images/trash.png";
-    trash.classList.add("trash");
-    trash.style.left = Math.random() * (window.innerWidth - 60) + "px";
-    trash.style.top = Math.random() * (window.innerHeight - 60) + "px";
-
-    trash.addEventListener("click", () => {
-      game.removeChild(trash);
-      score++;
-      scoreEl.textContent = "Score: " + score;
-      clickSound.play();
-
-      if (score === trashCount) {
-        winSound.play();
-        alert("You won! 🎉");
-      }
-    });
-
-    game.appendChild(trash);
-  }
+  gameInterval = setInterval(spawnTrash, 1500);
 }
 
-// Паралакс
-window.addEventListener("mousemove", (e) => {
-  const x = (e.clientX / window.innerWidth) - 0.5;
-  const y = (e.clientY / window.innerHeight) - 0.5;
+// Спавн мусора
+function spawnTrash() {
+  const trash = document.createElement("div");
+  trash.classList.add("trash");
+  trash.style.left = Math.random() * (window.innerWidth - 50) + "px";
+  trash.style.top = "-60px";
+  game.appendChild(trash);
 
-  document.querySelector(".background").style.transform =
-    `translate(${x * 20}px, ${y * 20}px)`;
-  document.querySelector(".trees").style.transform =
-    `translate(${x * 40}px, ${y * 40}px)`;
-  document.querySelector(".clouds").style.transform =
-    `translate(${x * 60}px, ${y * 60}px)`;
-});
+  let fallInterval = setInterval(() => {
+    let top = parseInt(trash.style.top);
+    if (top > window.innerHeight) {
+      clearInterval(fallInterval);
+      trash.remove();
+    } else {
+      trash.style.top = top + 4 + "px";
+    }
+  }, 20);
+
+  trash.addEventListener("click", () => {
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+    clickSound.play();
+    trash.remove();
+
+    if (score >= 10) {
+      clearInterval(gameInterval);
+      winSound.play();
+      alert("🎉 Ты победил!");
+      bgMusic.pause();
+    }
+  });
+}
+
+// Параллакс
+function applyParallax() {
+  const bg = document.querySelector(".background");
+  const trees = document.querySelector(".trees");
+
+  let offset = 0;
+
+  setInterval(() => {
+    offset -= 1;
+    bg.style.backgroundPositionX = offset * 0.3 + "px";
+    trees.style.backgroundPositionX = offset + "px";
+  }, 30);
+}
+
+startBtn.addEventListener("click", startGame);
+applyParallax();
