@@ -7,7 +7,7 @@ const winSound = document.getElementById("winSound");
 let score = 0;
 let gameInterval;
 
-// 🎵 Запуск музыки
+// 🎵 Запуск игры
 function startGame() {
   score = 0;
   scoreDisplay.textContent = "Score: " + score;
@@ -52,7 +52,7 @@ function spawnTrash() {
     }
   }
 
-  // ✅ ПК + телефон
+  // ✅ Работает и на телефоне, и на ПК
   trash.addEventListener("click", collectTrash);
   trash.addEventListener("touchstart", collectTrash);
 }
@@ -66,5 +66,4 @@ function applyParallax() {
   let scrollY = window.scrollY;
   document.getElementById("background").style.transform = `translateY(${scrollY * 0.3}px)`;
   document.getElementById("trees").style.transform = `translateY(${scrollY * 0.6}px)`;
-  document.getElementById("clouds").style.transform = `translateY(${scrollY * 0.9}px)`;
 }
