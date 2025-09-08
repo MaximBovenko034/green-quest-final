@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Green Quest</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -10,15 +10,16 @@
   <div id="game">
     <button id="startBtn">Start</button>
     <div id="score">Score: 0</div>
+    <div id="hint" class="hidden">Клікни по сміттю, щоб зібрати його!</div>
     <div id="background"></div>
     <div id="trees"></div>
   </div>
 
-  <!-- 🎵 звуки (лежат в корне репозитория) -->
+  <!-- Звуки -->
   <audio id="bgMusic" src="bg-music.mp3" loop></audio>
   <audio id="clickSound" src="click-trash.mp3"></audio>
   <audio id="winSound" src="win.mp3"></audio>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
